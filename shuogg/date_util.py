@@ -63,8 +63,22 @@ def get_date_by_offset(date, D_offset=0, M_offset=0, Y_offset=0):
     return new_date
 
 
+def timestamp2str(timestamp):
+    """
+    :param timestamp:
+    :return: str
+    """
+    try:
+        d = datetime.datetime.fromtimestamp(timestamp)
+        return d.strftime("%Y-%m-%d %H:%M:%S")
+    except Exception as e:
+        print(e)
+
+
 if __name__ == '__main__':
-    thelist = get_each_day(datetime.datetime.strptime('2017-12-01 01:00:00', DATETIME_FORMAT), datetime.datetime.now())
+    thelist = get_each_day(datetime.datetime.strptime(
+        '2017-12-01 01:00:00', DATETIME_FORMAT), datetime.datetime.now())
     for i in thelist:
         print(i.strftime(DATETIME_FORMAT))
     print((get_date_by_offset(datetime.datetime.now(), 1, 1, 1) - get_now()).days)
+    print(timestamp2str(1524878239))
