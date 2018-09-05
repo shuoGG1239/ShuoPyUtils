@@ -74,11 +74,11 @@ def get_files_fullpath(dir_path, suffix=''):
     :param suffix: 后缀如".sql" ".java" ; 若不填则不进行文件过滤
     :return: list of str
     """
-    files = list(filter(lambda x: os.path.isfile(x), os.listdir(dir_path)))
+    files = list(filter(lambda x: os.path.isfile(os.path.join(dir_path, x)), os.listdir(dir_path)))
     if suffix != '':
         # 留下后缀为suffix的文件
         files = list(filter(lambda x: x.endswith(suffix), files))
-    all_fullpath = list(map(lambda x: os.getcwd() + '\\' + x, files))
+    all_fullpath = list(map(lambda x: os.path.join(dir_path, x), files))
     return all_fullpath
 
 
@@ -89,6 +89,15 @@ def get_files_fullpath_curdir(suffix=''):
     :return: list of str
     """
     return get_files_fullpath(os.getcwd(), suffix)
+
+
+def get_dirs_fullpath(dir_path):
+    """
+     获取dir_path目录下所有文件夹的路径
+    """
+    dirs = list(filter(lambda x: os.path.isdir(os.path.join(dir_path, x)), os.listdir(dir_path)))
+    all_fullpath = list(map(lambda x: os.path.join(dir_path, x), dirs))
+    return all_fullpath
 
 
 
