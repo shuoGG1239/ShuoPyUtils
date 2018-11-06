@@ -74,12 +74,42 @@ def get_files_fullpath(dir_path, suffix=''):
     :param suffix: 后缀如".sql" ".java" ; 若不填则不进行文件过滤
     :return: list of str
     """
-    files = list(filter(lambda x: os.path.isfile(os.path.join(dir_path, x)), os.listdir(dir_path)))
+    files = list(filter(lambda x: os.path.isfile(
+        os.path.join(dir_path, x)), os.listdir(dir_path)))
     if suffix != '':
         # 留下后缀为suffix的文件
         files = list(filter(lambda x: x.endswith(suffix), files))
     all_fullpath = list(map(lambda x: os.path.join(dir_path, x), files))
     return all_fullpath
+
+
+def get_files_fullpath_recur(dir_path, suffix=None):
+    """
+    获取dir_path目录及其子目录下所有.xxx文件的路径
+    :param suffix: 后缀如".sql" ".java" ; 若不填则不进行文件过滤
+    :return: str or list or tuple
+    """
+    if dir_path == '' or dir_path is None:
+        return
+    if os.path.isfile(dir_path):
+        return
+    urls = list()
+    for maindir, subdir, filename_list in os.walk(dir_path):
+        for file in filename_list:
+            full_path = os.path.join(maindir, file)
+            ext = os.path.splitext(full_path)[1]
+            ok = False
+            if suffix is None:
+                ok = True
+            elif isinstance(suffix, str):
+                if suffix == ext:
+                    ok = True
+            elif isinstance(suffix, list) or isinstance(suffix, tuple):
+                if suffix is None or ext in suffix:
+                    ok = True
+            if ok:
+                urls.append(full_path)
+    return urls
 
 
 def get_files_fullpath_curdir(suffix=''):
@@ -95,11 +125,12 @@ def get_dirs_fullpath(dir_path):
     """
      获取dir_path目录下所有文件夹的路径
     """
-    dirs = list(filter(lambda x: os.path.isdir(os.path.join(dir_path, x)), os.listdir(dir_path)))
+    dirs = list(filter(lambda x: os.path.isdir(
+        os.path.join(dir_path, x)), os.listdir(dir_path)))
     all_fullpath = list(map(lambda x: os.path.join(dir_path, x), dirs))
     return all_fullpath
 
 
-
 if __name__ == '__main__':
-    pass
+    for p in get_files_fullpath_recur('F:/django_code', ('.py','.html')):
+        print(p)
