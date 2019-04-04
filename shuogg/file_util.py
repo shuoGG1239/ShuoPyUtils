@@ -130,7 +130,26 @@ def get_dirs_fullpath(dir_path):
     all_fullpath = list(map(lambda x: os.path.join(dir_path, x), dirs))
     return all_fullpath
 
+def split_path_file_ext(path):
+    """
+    :return: (文件名, .扩展名)
+    """
+    path, filename = os.path.split(path)
+    name, ext = os.path.splitext(filename)
+    return path, name, ext
+
+def path_with_tail(path, tail):
+    """
+    给文件名加后缀
+    eg: newPath = path_with_tai('abc.jpg', '_1') # newPath为 'abc_1.jpg'
+    """
+    p, name, ext = split_path_file_ext(path)
+    if p == '':
+        os_sep = ''
+    else:
+        os_sep = os.path.sep
+    return p + os_sep + name + tail + ext
 
 if __name__ == '__main__':
-    for p in get_files_fullpath_recur('F:/django_code', ('.py','.html')):
-        print(p)
+    a = """D:\\git_project\\ShuoPyUtils\\shuogg\\des_util.py"""
+    print(split_path_file_ext(a))
